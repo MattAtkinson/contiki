@@ -58,6 +58,9 @@ net_init()
   uip_ds6_addr_t *lladdr;
   uip_ipaddr_t ipaddr;
   uint8_t i;
+#ifdef DEFAULT_IPV6_ROUTE
+  uip_ipaddr_t routeaddr;
+#endif
 
   queuebuf_init();
   #ifdef __USE_CC2520__
@@ -104,6 +107,17 @@ net_init()
     GLOBAL_IPv6_ADDR5, GLOBAL_IPv6_ADDR6, GLOBAL_IPv6_ADDR7, GLOBAL_IPv6_ADDR8);
   uip_ds6_set_addr_iid(&ipaddr, &uip_lladdr);
   uip_ds6_addr_add(&ipaddr, 0, ADDR_TENTATIVE);
+
+#ifdef DEFAULT_IPV6_ROUTE
+  if(uiplib_ipaddrconv(DEFAULT_IPV6_ROUTE, &routeaddr))
+  {
+    uip_ds6_defrt_add(&routeaddr, 0);
+  }
+  else
+  {
+    PRINTF("Failed to convert default ipv6 route: %s\n", DEFAULT_IPV6_ROUTE);
+  }
+#endif
 
   PRINTF("Short MAC address %02x:%02x\n",
     *((uint8_t *)&shortaddr), *((uint8_t *)&shortaddr + 1));

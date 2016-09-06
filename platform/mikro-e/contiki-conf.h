@@ -144,4 +144,8 @@ typedef uint32_t rtimer_clock_t;
   #define GLOBAL_IPv6_ADDR8                     0x0
 #endif
 
+#ifndef DEFAULT_IPV6_ROUTE
+  #define DEFAULT_IPV6_ROUTE                    "2001:1418:0100::1"
+#endif
+
 #endif /* CONTIKI_CONF_H */
